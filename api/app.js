@@ -17,9 +17,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use('/',require('./routes/index'));//http://localhos:3000
-app.use('users',require('./routes/users')); // http://localhost:3000/users
-app.use('/auditlogs',require('./routes/auditlogs')); // http://localhost:3000/users/auitlogs
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -31,6 +28,8 @@ app.use((req,res,next)=>{
 })
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api',require('./routes/index'));//http://localhos:3000
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
