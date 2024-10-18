@@ -34,6 +34,15 @@ class Response {
                     description: error.description // CustomError'dan gelen açıklama.
                 }
             };
+        }else if(error.message.includes("E1100")){
+            return{
+                code: Enum.HTTP_CODES.CONFLICT,
+                error:{
+                    message: "  already exists ",
+                    description: "already exists"
+                }
+            }
+
         }
 
         // Eğer hata CustomError değilse, genel bir hata mesajı döndürülür.
