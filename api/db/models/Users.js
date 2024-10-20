@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema(
     {
         // Kullanıcının email adresi. Tipi String olarak belirlenmiş.
-        email: {type: String,required: true},
+        email: {type: String,required: true,unique: true},
 
         // Kullanıcının şifresi. Tipi String olarak belirlenmiş.
         password: {type: String,required: true},
@@ -23,6 +23,7 @@ const schema = mongoose.Schema(
         phone_number: String
     },
     {
+        versionKey:false,// otomatik olarak gelen version key değerinin gelmesini istemiyorum.
         // Bu ikinci parametre, zaman damgalarını otomatik olarak eklemek için kullanılır.
         // createdAt ve updatedAt isimleriyle tarih ve zaman değerleri otomatik olarak kaydedilecek.
         timestamps: {
