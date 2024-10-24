@@ -1,7 +1,8 @@
 // Gerekli kütüphaneleri yüklüyoruz.
 var express = require('express')
 var router = express.Router(); // Express Router'ı başlatıyoruz, bu API endpoint'lerini yönetmek için kullanılır.
-
+// audit logs ekleniyo
+const AuditLogs=require("../lib/AuditLogs");
 // MongoDB Categories modelini yüklüyoruz.
 const Categories = require("../db/models/Categories");
 
@@ -14,6 +15,7 @@ const Enum = require("../config/Enum");
 // Hata yönetimi için özel hata sınıflarını yüklüyoruz.
 const Error = require("../lib/Error");
 const CustomError = require('../lib/Error');
+const logger=require ("../lib/logger/LoggerClass");
 
 // Kullanıcı oturumunu doğrulamak için bir kontrol (şu an hardcoded olarak true yani doğrulama başarılı).
 const isAuthhenticated = true;
@@ -63,10 +65,12 @@ router.post("/add", async (req, res) => {
 
         // Yeni kategoriyi kaydediyoruz.
         await category.save();
-
+        AuditLogs.info(req.user?.email,"Categories","Add",category);
+logger.info(req.user?.email,"Categories","Add",category);
         // Başarılı yanıt döndürülüyor.
         res.json(Response.successResponse({ success: true }))
     } catch (err) {
+        logger.error(req.user?.email,"Categories","Add",err);
         // Hata oluşursa, hata yanıtı oluşturup dönüyoruz.
         let errorResponse = Response.errorResponse(err);
         res.status(errorResponse.code).json(errorResponse);
@@ -91,6 +95,7 @@ router.post("/update", async (req, res) => {
 
         // Belirtilen kategoriyi güncelliyoruz.
         await Categories.updateOne({ _id: body._id }, updates);
+        AuditLogs.info(req.user?.email,"Categories","Update",{_id: body.id,...updates});
 
         // Başarılı yanıt döndürülüyor.
         res.json(Response.successResponse({ success: true }))
@@ -110,6 +115,7 @@ router.post("/delete", async (req, res) => {
         
         // Belirtilen kategoriyi siliyoruz.
         await Categories.remove({ _id: body._id });
+        AuditLogs.info(req.user?.email,"Categories","Delete",{_id: body.id});
 
         // Başarılı yanıt döndürülüyor.
         res.json(Response.successResponse({ success: true }));
