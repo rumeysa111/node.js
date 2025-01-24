@@ -23,5 +23,4 @@ This project is a Node.js educational repository aimed at demonstrating the fund
 - **Express.js**
 - **MongoDB**
 - **JavaScript**
-- **Lua**
 
